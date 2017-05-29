@@ -35,11 +35,15 @@ library(dplyr)
 ```
 ## 
 ## Attaching package: 'dplyr'
+```
+
+```
+## The following objects are masked from 'package:stats':
 ## 
-## The following object is masked from 'package:stats':
-## 
-##     filter
-## 
+##     filter, lag
+```
+
+```
 ## The following objects are masked from 'package:base':
 ## 
 ##     intersect, setdiff, setequal, union
@@ -47,6 +51,20 @@ library(dplyr)
 
 ```r
 library(lubridate)
+```
+
+```
+## 
+## Attaching package: 'lubridate'
+```
+
+```
+## The following object is masked from 'package:base':
+## 
+##     date
+```
+
+```r
 data <- mutate(.data = data, time = ymd_hm(paste(date, sprintf(fmt = "%04d", interval),sep = " ")))
 ```
 
@@ -71,7 +89,11 @@ g <- g + labs(title = "Distribution of daily sum of steps")
 print(g)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
+```
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
 The maximum value of the distribution resides in the lower class, with 10 occurrences.
 
 Using the data on daily total number of steps, from the previous graph, the mean and median values for the observed sample are as follows:
@@ -110,7 +132,7 @@ g <- g + labs(title = "Average of number of steps for 5-minutes intervals")
 print(g)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
 
 The main evidence, as shown in the graph, is that the maximum average number of steps in a 5 minute span is reached between the 7:30 am and 10:00 am (extacly at 8:35 am). This peak doubles the value of the other relevant high average 5-minute span, in the rest of the day
 ## Imputing missing values
@@ -163,7 +185,11 @@ g <- g + labs(title = "Distribution of daily sum of steps")
 print(g)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-10-1.png) 
+```
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
 
 ```r
 mean(tot_steps_adj$tot_steps)
@@ -210,7 +236,7 @@ g <- g + labs(title = "Average Number of steps for 5-minutes weekday vs weekend"
 print(g)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-11-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
 
 The two plots comparing the Average number of steps in a 5-minute interval for weekdays and weekend days seems to be slightly different. In the first plot (weekdays) the general maximum is clearly defined, similarly to the graph of the previous analysis. On the other hand, the graph for the weekdays shows 4 peaks where the average number of steps is similar.
 
