@@ -5,20 +5,38 @@ output:
     keep_md: true
 ---
 
-In this brief empirical analysis data from a personal activity monitoring device is analyzed in order to:
+This paper shows the results of the analysis performed on data retrieved from a personal activity monitoring device. The outcome of this analysis are as follows:
 
-- find **daily mean** of the total number of steps
+- Calculation of **daily mean** of the total number of steps;
 
-- find possible **patterns** in average daily activity
+- Evaluation of **patterns** in average daily activity;
 
-- find an adequate **proxy** for NA values, and subsequently use them to compute simple **summary statistics** (mean and median)
+- Definition of a **proxy value** for NA values to be used;
 
-- evaluate **differences in activity patterns** between weekdays and weedend days 
+- Calculation of **summary statistics** (mean and median) with adjusted dataset;
 
-Throughout the whole analysis there will be evidences of the whole R code actually used to perform the computations, to find the desired results and to create the required graphics
+- Evaluation of **differences ** in activity patterns for week vs. weedend days. 
+
+The analysis was performed with:
+
+- R v3.4 -- "You Stupid Darkness"
+
+- RStudio v1.0
+
+To replicate the analysis the following R packages are required:
+
+```{r message=FALSE}
+library(dplyr)
+library(lubridate)
+library(ggplot2)
+```
+For each step of the analysis there will be a reference to the specific libraries required to run that code.
+
+The complete R code, developed for this analysis, is presented throughout the document. 
+
 
 ## Loading and preprocessing the data
-Assuming the dataset *activity.csv* is in the current working directory of R (recall: use getwd() to verify the actual working directory, use setwd() to set a new working directory) these are the steps required to load the data into R:
+Assuming the dataset *activity.csv* is in the current working directory of R (recall: use getwd() to verify the actual working directory, use setwd() to set a new working directory), this is the process to load that specific dataset into R:
 ```{r}
 data <- read.csv("activity.csv", header = TRUE, sep = ",")
 ```
@@ -30,7 +48,8 @@ The data.frame just loaded is made of  17568 observations of 3 variables, with t
 
 - **interval**, loaded as integer values
 
-It may be useful to create an additional variable, summarizing the two variables *date* and *interval* into a single object of POSIXct class, as follows:
+For the following calculations, it may be useful to create an additional variable as the sum of the two variables *date* and *interval* to define a single object of POSIXct class, as follows:
+
 ```{r}
 library(dplyr)
 library(lubridate)
@@ -38,7 +57,15 @@ data <- mutate(.data = data, time = ymd_hm(paste(date, sprintf(fmt = "%04d", int
 ```
 
 ## What is mean total number of steps taken per day?
-To compute the total number of steps taken per day, from the original dataset, using *dplyr*, data is grouped by date variable, then summarized applying the function sum(), excluding NA values. The following is the R code used to perform those steps:
+From the original dataset, to compute the mean total number of steps, the process is as follows:
+
+- group the dataset by *date* variable, with group_by function; 
+
+- sum the variable *steps* excluding NA values, with summarize function.
+
+The result will be a summarized dataset where the relation between day and total number of steps taken is explicit.
+
+The following is the R code used to perform those steps:
 ```{r}
 library(dplyr)
 tot_steps <- data %>%
@@ -54,6 +81,7 @@ g <- g + geom_histogram(data = tot_steps, aes(tot_steps, fill= ..count..))
 g <- g + theme_bw(base_family="Avenir")
 g <- g + labs(x = "Sum of Daily Steps", y = "Count")
 g <- g + labs(title = "Distribution of daily sum of steps")
+g <- g + theme(plot.title = element_text(hjust = 0.5))
 print(g)
 ```
 The maximum value of the distribution resides in the lower class, with 10 occurrences.
@@ -155,6 +183,6 @@ g <- g + labs(title = "Average Number of steps for 5-minutes weekday vs weekend"
 print(g)
 ```
 
-The two plots comparing the Average number of steps in a 5-minute interval for weekdays and weekend days seems to be slightly different. In the first plot (weekdays) the general maximum is clearly defined, similarly to the graph of the previous analysis. On the other hand, the graph for the weekdays shows 4 peaks where the average number of steps is similar.
+The two plots comparing the Average number of steps in a 5-minute interval for week days and weekend days seems to be slightly different. In the first plot (weekdays) the general maximum is clearly defined, similarly to the graph of the previous analysis. On the other hand, the graph for the weekdays shows 4 peaks where the average number of steps is similar.
 
 This leads, therefore, to the conclusion that there is a slightly different activity between the weekday (where a clear maximum can be identified and has an average which double the second highest peak) and the weekend days, where the activity is somewhat cyclical between 5 am and 8 pm.

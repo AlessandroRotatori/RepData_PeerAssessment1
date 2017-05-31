@@ -10,7 +10,23 @@ In this brief empirical analysis data from a personal activity monitoring device
 
 - evaluate **differences in activity patterns** between weekdays and weedend days 
 
-Throughout the whole analysis there will be evidences of the whole R code actually used to perform the computations, to find the desired results and to create the required graphics
+
+The following analysis was performed with:
+
+- R v3.4 -- "You Stupid Darkness"
+
+- RStudio v1.0
+
+The complete R code, developed for this analysis, is presented throughout the document. 
+Moreover, to replicate the analysis the following R packages are required:
+
+
+```r
+library(dplyr)
+library(lubridate)
+library(ggplot2)
+```
+Every code chunk will have the indication of libraries that are required to run that specific code.
 
 ## Loading and preprocessing the data
 Assuming the dataset *activity.csv* is in the current working directory of R (recall: use getwd() to verify the actual working directory, use setwd() to set a new working directory) these are the steps required to load the data into R:
@@ -28,43 +44,10 @@ The data.frame just loaded is made of  17568 observations of 3 variables, with t
 
 It may be useful to create an additional variable, summarizing the two variables *date* and *interval* into a single object of POSIXct class, as follows:
 
+
 ```r
 library(dplyr)
-```
-
-```
-## 
-## Attaching package: 'dplyr'
-```
-
-```
-## The following objects are masked from 'package:stats':
-## 
-##     filter, lag
-```
-
-```
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-```
-
-```r
 library(lubridate)
-```
-
-```
-## 
-## Attaching package: 'lubridate'
-```
-
-```
-## The following object is masked from 'package:base':
-## 
-##     date
-```
-
-```r
 data <- mutate(.data = data, time = ymd_hm(paste(date, sprintf(fmt = "%04d", interval),sep = " ")))
 ```
 
@@ -86,6 +69,7 @@ g <- g + geom_histogram(data = tot_steps, aes(tot_steps, fill= ..count..))
 g <- g + theme_bw(base_family="Avenir")
 g <- g + labs(x = "Sum of Daily Steps", y = "Count")
 g <- g + labs(title = "Distribution of daily sum of steps")
+g <- g + theme(plot.title = element_text(hjust = 0.5))
 print(g)
 ```
 
@@ -93,7 +77,7 @@ print(g)
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
 The maximum value of the distribution resides in the lower class, with 10 occurrences.
 
 Using the data on daily total number of steps, from the previous graph, the mean and median values for the observed sample are as follows:
@@ -132,7 +116,7 @@ g <- g + labs(title = "Average of number of steps for 5-minutes intervals")
 print(g)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+![](PA1_template_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
 The main evidence, as shown in the graph, is that the maximum average number of steps in a 5 minute span is reached between the 7:30 am and 10:00 am (extacly at 8:35 am). This peak doubles the value of the other relevant high average 5-minute span, in the rest of the day
 ## Imputing missing values
@@ -189,7 +173,7 @@ print(g)
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
+![](PA1_template_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
 
 ```r
 mean(tot_steps_adj$tot_steps)
@@ -236,8 +220,8 @@ g <- g + labs(title = "Average Number of steps for 5-minutes weekday vs weekend"
 print(g)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
+![](PA1_template_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
 
-The two plots comparing the Average number of steps in a 5-minute interval for weekdays and weekend days seems to be slightly different. In the first plot (weekdays) the general maximum is clearly defined, similarly to the graph of the previous analysis. On the other hand, the graph for the weekdays shows 4 peaks where the average number of steps is similar.
+The two plots comparing the Average number of steps in a 5-minute interval for week days and weekend days seems to be slightly different. In the first plot (weekdays) the general maximum is clearly defined, similarly to the graph of the previous analysis. On the other hand, the graph for the weekdays shows 4 peaks where the average number of steps is similar.
 
 This leads, therefore, to the conclusion that there is a slightly different activity between the weekday (where a clear maximum can be identified and has an average which double the second highest peak) and the weekend days, where the activity is somewhat cyclical between 5 am and 8 pm.
